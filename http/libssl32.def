@@ -1,0 +1,2 @@
+; dlltool -z libssl32.def --export-all-symbol libssl32.dll
+EXPORTS

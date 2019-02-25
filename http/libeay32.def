@@ -1,0 +1,2 @@
+; dlltool -z libeay32.def --export-all-symbol libeay32.dll
+EXPORTS
