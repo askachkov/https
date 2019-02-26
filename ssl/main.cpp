@@ -45,28 +45,28 @@ extern "C" {
 /* define HOME to be dir for key and cert files... */
 #define HOME "./"
 /* Make these what you want for cert & key files */
-#define CERTF  HOME "foo-cert.pem"
-#define KEYF  HOME  "foo-cert.pem"
+#define CERTF  HOME "certificate.crt"
+#define KEYF  HOME  "privateKey.key"
 
 
 #define CHK_NULL(x) if ((x)==NULL) exit (1)
 #define CHK_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
 #define CHK_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(2); }
 
-void main ()
+int main ()
 {
   int err;
   int listen_sd;
   int sd;
   struct sockaddr_in sa_serv;
   struct sockaddr_in sa_cli;
-  size_t client_len;
+  socklen_t client_len;
   SSL_CTX* ctx;
   SSL*     ssl;
   X509*    client_cert;
   char*    str;
   char     buf [4096];
-  SSL_METHOD *meth;
+  const SSL_METHOD *meth;
 
   /* SSL preliminaries. We keep the certificate and key with the context. */
 
@@ -165,5 +165,6 @@ void main ()
   close (sd);
   SSL_free (ssl);
   SSL_CTX_free (ctx);
+  return 0;
 }
 /* EOF - serv.cpp */

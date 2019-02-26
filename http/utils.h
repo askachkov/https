@@ -18,10 +18,29 @@ extern "C" {
 #endif
 
 }
+
+/* define HOME to be dir for key and cert files... */
+#define HOME "/home/as/QtProjects/keys/v1/"
+/* Make these what you want for cert & key files */
+#define CERTF  HOME "localhost.crt"
+#define KEYF  HOME  "localhost.key"
+
+#define CHK_NULL(x) if ((x)==NULL) return
+#define CHK_ERR(err,s) if ((err)==-1) { perror(s); return; }
+#define CHK_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); return; }
+
 #include "client.h"
 
 
-const int PORT_NO = 1080;
+#include <openssl/rsa.h>       /* SSLeay stuff */
+#include <openssl/crypto.h>
+#include <openssl/x509.h>
+#include <openssl/pem.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
+const int PORT_NO = 2080;
+const int PORT_SSL_NO = 2443;
 
 void error(const char *msg);
 void bzero(void * ptr, size_t size);

@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <stdint.h>
 
+#define SOCKET int
+
 void error(const char *msg)
 {
     perror(msg);
@@ -77,7 +79,7 @@ int Socket::listen(int n)
 Socket Socket::accept()
 {
     sockaddr_in addr;
-    int clilen = sizeof(addr);
+    socklen_t clilen = sizeof(addr);
     memset(&addr, 0, sizeof(addr));
     SOCKET newsockfd = ::accept(static_cast<SOCKET>(getSockFD()), reinterpret_cast<struct sockaddr *>(&addr), &clilen);
     return Socket(static_cast<int>(newsockfd), addr);

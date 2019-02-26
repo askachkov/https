@@ -9,9 +9,7 @@ SOURCES += \
 DISTFILES += \
     main.txt
 
-LIBS += -lws2_32
-
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../LibSocket/release/ -lsocketstream
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../LibSocket/release/ -lsocketstream -lws2_32
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../LibSocket/debug/ -lsocketstream
 else:unix: LIBS += -L$$OUT_PWD/../LibSocket/ -lsocketstream
 

@@ -46,6 +46,14 @@ void addContentType(HttpHeader & header, HTTP_ContentTypes type)
     header.lines.push_back(pair);
 }
 
+void addContentEncoding(HttpHeader & header)
+{
+    HttpPair pair;
+    pair.key = "Content-Encoding";
+    pair.value = "gzip";
+    header.lines.push_back(pair);
+}
+
 std::ostream &operator <<(std::ostream &stream, const HttpPair &pair)
 {
     return stream << pair.key << ": " << pair.value;
@@ -68,5 +76,6 @@ HttpHeader getDefaultHeader(HTTP_Status status, size_t len, HTTP_ContentTypes ty
     addDate(result);
     addContentType(result, type);
     addContentLength(result, len);
+    addContentEncoding(result);
     return result;
 }

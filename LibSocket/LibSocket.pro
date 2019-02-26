@@ -11,6 +11,6 @@ HEADERS += \
     socket.h \
     socketstream.h
 
-LIBS += -lws2_32
+win32:CONFIG(release, debug|release): LIBS += -lws2_32
 
 TARGET = socketstream

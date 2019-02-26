@@ -5,10 +5,11 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
+#ifdef __WIN32__
     WORD versionWanted = MAKEWORD(1, 1);
     WSADATA wsaData;
     WSAStartup(versionWanted, &wsaData);
-
+#endif
     cout << "Starting... " << endl;
     ServerSocketStream server(1080);
     server.bind();

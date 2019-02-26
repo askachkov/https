@@ -8,11 +8,13 @@ extern "C" {
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
+#define SOCKET int
+
 #endif
 
 }
 
-
 void processClient(SOCKET socket);
+void processClientSSL(SOCKET socket);
 
 #endif // CLIENT_H
