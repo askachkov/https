@@ -21,6 +21,6 @@ HEADERS += \
     tasks.h \
     gzip.h
 
-LIBS += -lssl -lcrypto /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+LIBS += -lssl -lcrypto -lz
 
 win32:CONFIG(release, debug|release): LIBS += -lws2_32
