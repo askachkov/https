@@ -6,6 +6,8 @@ void setStatus(HttpHeader & header, HTTP_Status status)
 {
     switch ( status ){
     case HTTP1_1_OK: header.statusLine = "HTTP/1.1 200 OK"; break;
+    case HTTP1_1_404: header.statusLine = "HTTP/1.1 404 Not Found"; break;
+    case HTTP1_1_302: header.statusLine = "HTTP/1.1 302 Found"; break;
     }
 }
 
@@ -42,6 +44,7 @@ void addContentType(HttpHeader & header, HTTP_ContentTypes type)
     pair.key = "Content-Type";
     switch ( type ){
     case TEXT_HTML: pair.value = "text/html"; break;
+    case IMG_PNG: pair.value = "img/png"; break;
     }
     header.lines.push_back(pair);
 }
@@ -69,13 +72,38 @@ std::ostream &operator <<(std::ostream &stream, const HttpHeader &header)
     return stream << end;
 }
 
-HttpHeader getDefaultHeader(HTTP_Status status, size_t len, HTTP_ContentTypes type)
+HttpHeader getDefaultHeader(HTTP_Status status, HTTP_ContentTypes type)
 {
     HttpHeader result;
     setStatus(result, status);
     addDate(result);
-    addContentType(result, type);
-    addContentLength(result, len);
-    addContentEncoding(result);
+    if ( status == HTTP1_1_OK ){
+        addContentType(result, type);
+        //addContentLength(result, len);
+        addContentEncoding(result);
+    }
     return result;
+}
+
+void addLocation(HttpHeader &header, const String & uri)
+{
+    HttpPair pair;
+    pair.key = "Location";
+    pair.value = uri;
+    header.lines.push_back(pair);
+}
+
+HttpHeader get404Header()
+{
+    HttpHeader result;
+    setStatus(result, HTTP1_1_404);
+    return result;
+}
+
+HttpHeader getRedirectHeader(const String &location)
+{
+    HttpHeader res;
+    setStatus(res, HTTP1_1_302);
+    addLocation(res, location);
+    return res;
 }

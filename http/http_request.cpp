@@ -1,3 +1,4 @@
+
 #include "http_request.h"
 #include "utils.h"
 
@@ -6,6 +7,28 @@
 //User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0
 //Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
 //Accept-Language: ru-RU,ru;q=0.8,en-
+
+//void readPath(std::istream &stream, HTTP_Request &req)
+//{
+//    String buffer;
+//    char ch;
+//    while ( stream.peek() == ' ' ){
+//        stream.get(ch);
+//    }
+//    while ( stream.get(ch) ){
+//        if ( ch == '?' || ch == ' ' ){
+//            stream.putback(ch);
+//            if ( !buffer.empty() )
+//                req.path.push_back(buffer);
+//            break;
+//        }
+//        buffer.push_back(ch);
+//        if ( ch == '/' ){
+//            req.path.push_back(buffer);
+//            buffer.clear();
+//        }
+//    }
+//}
 
 void readPath(std::istream &stream, HTTP_Request &req)
 {
@@ -18,14 +41,10 @@ void readPath(std::istream &stream, HTTP_Request &req)
         if ( ch == '?' || ch == ' ' ){
             stream.putback(ch);
             if ( !buffer.empty() )
-                req.path.push_back(buffer);
+                req.path = buffer;
             break;
         }
         buffer.push_back(ch);
-        if ( ch == '/' ){
-            req.path.push_back(buffer);
-            buffer.clear();
-        }
     }
 }
 

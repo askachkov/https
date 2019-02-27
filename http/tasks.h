@@ -1,7 +1,10 @@
 #ifndef TASKS_H
 #define TASKS_H
 
-void http_Task();
-void https_Task();
+#include "utils.h"
+
+typedef void F(SOCKET);
+
+void default_Task(F fnc, uint16_t port);
 
 #endif // TASKS_H

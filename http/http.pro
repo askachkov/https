@@ -11,7 +11,8 @@ SOURCES += \
     httpheader.cpp \
     http_request.cpp \
     tasks.cpp \
-    gzip.cpp
+    gzip.cpp \
+    handlers.cpp
 
 HEADERS += \
     client.h \
@@ -19,8 +20,14 @@ HEADERS += \
     httpheader.h \
     http_request.h \
     tasks.h \
-    gzip.h
+    gzip.h \
+    handlers.h
 
 LIBS += -lssl -lcrypto -lz
 
 win32:CONFIG(release, debug|release): LIBS += -lws2_32
+
+DISTFILES += \
+    www/index.htm \
+    www/404.htm \
+    www/face.png

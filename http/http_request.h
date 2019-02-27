@@ -29,7 +29,8 @@ struct HTTP_Request
     HTTP_Request_Type type;
     String host;
     uint16_t port;
-    StringList path;
+    //StringList path;
+    String path;
     QuaryList quary;
 };
 

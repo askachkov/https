@@ -1,5 +1,7 @@
 #include "utils.h"
 #include <memory.h>
+#include <fstream>
+#include <iostream>
 
 void error(const char *msg)
 {
@@ -57,4 +59,16 @@ char *urlEncode(const char *str) {
     }
     *pbuf = '\0';
     return buf;
+}
+
+std::string readFile(const std::string &path)
+{
+    const std::string p = "/home/as/QtProjects/https/https/http/www";
+    std::ifstream file(p + path);
+    char buf;
+    std::string res;
+    while ( file.read(&buf, 1) ){
+        res.push_back(buf);
+    }
+    return res;
 }

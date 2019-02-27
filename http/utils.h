@@ -62,5 +62,13 @@ char *urlEncode(const char *str);
 /* IMPORTANT: be sure to free() the returned string after use */
 std::string urlDecode(const std::string &str);
 
+struct IO
+{
+    virtual ~IO(){}
+    virtual int read(char * buf, int size) = 0;
+    virtual int write(const char * buf, int size) = 0;
+};
+
+std::string readFile(const std::string & path);
 
 #endif // UTILS_H

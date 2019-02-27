@@ -70,7 +70,7 @@ std::string Gzip::compress(const std::string &data)
         //shrink zlib suffix
         buf.zSize -= 4;//4 bytes in suffix
         GZipSuffix suff = getSuffix(buf);
-        suff.isize = data.length();
+        suff.isize = data.size();
         //copy suffix
         memcpy(&buf.compressedBuffer[buf.zSize], &suff, sizeof(suff));
         buf.totalSize += buf.zSize;

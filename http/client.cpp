@@ -4,13 +4,15 @@
 #include "http_request.h"
 #include <iostream>
 #include <sstream>
+#include <map>
 #include "gzip.h"
+#include "handlers.h"
 
-struct IO
-{
-    virtual ~IO(){}
-    virtual int read(char * buf, int size) = 0;
-    virtual int write(const char * buf, int size) = 0;
+std::map<std::string, Handler> MAP = {
+    std::make_pair("/help", helpHandler), //Help handler
+    //std::make_pair("/file", fileHandler), //Help handler
+    std::make_pair("/index.htm", indexHandler), //Help handler
+    std::make_pair("/", redirectToIndexHandler), //Help handler
 };
 
 struct PlainIO: IO
@@ -44,40 +46,30 @@ void process(IO & io)
     int n;
     char buffer[1024];
     bzero(buffer,1024);
-    //n = recv(socket, buffer, 1024, 0);
     n = io.read(buffer, 1024);
-    if (n < 0)
+    if (n < 0){
         error("ERROR reading from socket");
-
+        return;
+    }
+    std::cout << "Request: " << buffer << std::endl << std::endl;
     HTTP_Request req;
     std::istringstream iss(buffer);
     iss >> req;
 
-    std::cout << "Request: " << buffer << std::endl << std::endl;
-
-    std::string body("<PRE>");
-    body+= buffer;
-    body += '\n';
-    body += '\n';
-    for ( int i = 0; i < req.path.size(); ++i ){
-        body += req.path[i] + ' ';
+    std::string message;
+    HTTP_Response resp;
+    if ( MAP.find(req.path) != MAP.end() ){
+        resp = MAP[req.path](req);
+    } else {
+        //message = toString( getDefaultHeader(HTTP1_1_404, 0, TEXT_HTML) );
+        resp = fileHandler(req);
     }
-    body += '\n';
-    for ( int i = 0; i < req.quary.size(); ++i ){
-        body += req.quary[i].key + '=' + req.quary[i].value + '\n';
-    }
-    body+= "</PRE>";
 
-    std::cout << "Body: " << body.size() << std::endl << std::endl;
-    body = Gzip::compress(body);
+    if ( !resp.body.empty() )
+        resp.body = Gzip::compress(resp.body);
+    addContentLength(resp.header, resp.body.size());
+    message = toString(resp.header) + resp.body;
 
-    std::cout << "ZBody: " << body.size() << std::endl << std::endl;
-
-    HttpHeader header = getDefaultHeader(HTTP1_1_OK, body.size(), TEXT_HTML);
-    std::string message = toString(header) + body;
-
-    //const char * resp = "HTTP/1.1 200 OK\nDate: Mon, 18 Feb 2019 10:02:37 GMT\nContent-Length: 4\nContent-Type: text/html\n\nText";
-    //n = send(socket, message.c_str(), message.size(), 0);
     n = io.write(message.c_str(), message.size());
     if (n < 0)
         error("ERROR writing to socket");
