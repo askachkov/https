@@ -13,7 +13,7 @@ HTTP_Response helpHandler(const HTTP_Request &req)
 //    }
     body += req.path;
     body += '\n';
-    for ( int i = 0; i < req.quary.size(); ++i ){
+    for ( size_t i = 0; i < req.quary.size(); ++i ){
         body += req.quary[i].key + '=' + req.quary[i].value + '\n';
     }
     body+= "</PRE>";
@@ -23,7 +23,7 @@ HTTP_Response helpHandler(const HTTP_Request &req)
     return res;
 }
 
-HTTP_Response indexHandler(const HTTP_Request &req)
+HTTP_Response indexHandler(const HTTP_Request &)
 {
     HTTP_Response res;
     res.body = readFile("/index.htm");
@@ -42,6 +42,7 @@ HTTP_ContentTypes getTypeByPath(const std::string path)
     if ( equal(HTM.rbegin(), HTM.rend(), path.rbegin()) ) {
         return TEXT_HTML;
     }
+    return TEXT_HTML;
 }
 
 HTTP_Response fileHandler(const HTTP_Request &req)
@@ -57,7 +58,7 @@ HTTP_Response fileHandler(const HTTP_Request &req)
     return res;
 }
 
-HTTP_Response redirectToIndexHandler(const HTTP_Request &req)
+HTTP_Response redirectToIndexHandler(const HTTP_Request &)
 {
     HTTP_Response res;
     res.header = getRedirectHeader("/index.htm");

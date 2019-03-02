@@ -20,10 +20,11 @@ extern "C" {
 }
 
 /* define HOME to be dir for key and cert files... */
-#define HOME "/home/as/QtProjects/keys/v1/"
+#define HOME "/home/aleks/projects/https/http/"
+#define KEY_FLD "keys/"
 /* Make these what you want for cert & key files */
-#define CERTF  HOME "localhost.crt"
-#define KEYF  HOME  "localhost.key"
+#define CERTF  HOME KEY_FLD "localhost.crt"
+#define KEYF  HOME  KEY_FLD "localhost.key"
 
 #define CHK_NULL(x) if ((x)==NULL) return
 #define CHK_ERR(err,s) if ((err)==-1) { perror(s); return; }

@@ -63,7 +63,7 @@ char *urlEncode(const char *str) {
 
 std::string readFile(const std::string &path)
 {
-    const std::string p = "/home/as/QtProjects/https/https/http/www";
+    const std::string p = HOME "www";
     std::ifstream file(p + path);
     char buf;
     std::string res;
