@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
-#include "gzip.h"
+#include <cgzip/gzip.h>
 #include "handlers.h"
 
 std::map<std::string, Handler> MAP = {

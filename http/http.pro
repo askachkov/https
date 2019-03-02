@@ -11,8 +11,8 @@ SOURCES += \
     httpheader.cpp \
     http_request.cpp \
     tasks.cpp \
-    gzip.cpp \
-    handlers.cpp
+    handlers.cpp \
+    Daemon.cpp
 
 HEADERS += \
     client.h \
@@ -20,8 +20,8 @@ HEADERS += \
     httpheader.h \
     http_request.h \
     tasks.h \
-    gzip.h \
-    handlers.h
+    handlers.h \
+    Daemon.h
 
 LIBS += -lssl -lcrypto -lz
 
@@ -31,3 +31,8 @@ DISTFILES += \
     www/index.htm \
     www/404.htm \
     www/face.png
+
+unix:!macx: LIBS += -L$$PWD/../../../lib/ -lcgzip -ldaemon-lite
+
+INCLUDEPATH += $$PWD/../../../include
+DEPENDPATH += $$PWD/../../../include
