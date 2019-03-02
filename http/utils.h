@@ -43,7 +43,7 @@ extern "C" {
 const int PORT_NO = 2080;
 const int PORT_SSL_NO = 2443;
 
-void error(const char *msg);
+void error(const char *msg, int logID);
 void bzero(void * ptr, size_t size);
 
 

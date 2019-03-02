@@ -23,7 +23,7 @@ HEADERS += \
     handlers.h \
     Daemon.h
 
-LIBS += -lssl -lcrypto -lz
+LIBS += -lssl -lcrypto -lz -lbrotlienc -lbrotlicommon
 
 win32:CONFIG(release, debug|release): LIBS += -lws2_32
 

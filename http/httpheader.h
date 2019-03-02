@@ -40,6 +40,14 @@ enum HTTP_Status
     HTTP1_1_302
 };
 
+enum HTTP_EncodingType
+{
+    HTTP_Encoding_None,
+    HTTP_Encoding_Brotli,
+    HTTP_Encoding_Deflate,
+    HTTP_Encoding_Gzip
+};
+
 HttpHeader getDefaultHeader(HTTP_Status status, HTTP_ContentTypes type);
 HttpHeader getRedirectHeader(const String &location);
 HttpHeader get404Header();
@@ -48,7 +56,7 @@ void setStatus(HttpHeader & header, HTTP_Status status);
 void addDate(HttpHeader & header);
 void addContentLength(HttpHeader & header, size_t len);
 void addContentType(HttpHeader & header, HTTP_ContentTypes type);
-void addContentEncoding(HttpHeader & header);
+void addContentEncoding(HttpHeader & header, HTTP_EncodingType type);
 void addLocation(HttpHeader & header, const String &uri);
 
 

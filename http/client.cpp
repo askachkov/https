@@ -7,6 +7,9 @@
 #include <map>
 #include <cgzip/gzip.h>
 #include "handlers.h"
+#include <daemon-lite/logger.h>
+
+#include <brotli/encode.h>
 
 std::map<std::string, Handler> MAP = {
     std::make_pair("/help", helpHandler), //Help handler
@@ -41,17 +44,19 @@ struct SSL_IO: IO
     }
 };
 
-void process(IO & io)
+void process(IO & io, int logID)
 {
     int n;
     char buffer[1024];
     bzero(buffer,1024);
     n = io.read(buffer, 1024);
     if (n < 0){
-        error("ERROR reading from socket");
+        error("ERROR reading from socket", logID);
         return;
     }
-    std::cout << "Request: " << buffer << std::endl << std::endl;
+    //std::cout << "Request: " << buffer << std::endl << std::endl;
+    LOGGER_DEBUG(logID, "Request: %s%s", "\n", buffer);
+
     HTTP_Request req;
     std::istringstream iss(buffer);
     iss >> req;
@@ -65,25 +70,30 @@ void process(IO & io)
         resp = fileHandler(req);
     }
 
-    if ( !resp.body.empty() )
-        resp.body = Gzip::compress(resp.body);
+    if ( !resp.body.empty() ){
+        addContentEncoding(resp.header, HTTP_Encoding_Brotli);
+        resp.body = Brotli::compress(resp.body);
+    }
     addContentLength(resp.header, resp.body.size());
-    message = toString(resp.header) + resp.body;
+    std::string header = toString(resp.header);
+    message = header + resp.body;
+
+    LOGGER_DEBUG(logID, "ResponseHeader: %s%s", "\n", header.c_str());
 
     n = io.write(message.c_str(), message.size());
     if (n < 0)
-        error("ERROR writing to socket");
+        error("ERROR writing to socket", logID);
 }
 
-void processClient(SOCKET socket)
+void processClient(SOCKET socket, int logID)
 {
     PlainIO io;
     io.fd = socket;
-    process(io);
+    process(io, logID);
     close(socket);
 }
 
-void processClientSSL(SOCKET socket)
+void processClientSSL(SOCKET socket, int logID)
 {
     SSL_CTX* ctx;
     SSL*     ssl;
@@ -126,6 +136,6 @@ void processClientSSL(SOCKET socket)
 
     SSL_IO io;
     io.ssl = ssl;
-    process(io);
+    process(io, logID);
     close(socket);
 }

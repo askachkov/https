@@ -14,7 +14,7 @@ extern "C" {
 
 }
 
-void processClient(SOCKET socket);
-void processClientSSL(SOCKET socket);
+void processClient(SOCKET socket, int logID);
+void processClientSSL(SOCKET socket, int logID);
 
 #endif // CLIENT_H

@@ -2,10 +2,12 @@
 #include <memory.h>
 #include <fstream>
 #include <iostream>
+#include <daemon-lite/logger.h>
 
-void error(const char *msg)
+void error(const char *msg, int logID)
 {
-    perror(msg);
+    LOGGER_DEBUG(logID, "msg")
+    //perror(msg);
     //exit(1);
 }
 

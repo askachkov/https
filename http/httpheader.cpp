@@ -49,11 +49,17 @@ void addContentType(HttpHeader & header, HTTP_ContentTypes type)
     header.lines.push_back(pair);
 }
 
-void addContentEncoding(HttpHeader & header)
+void addContentEncoding(HttpHeader & header, HTTP_EncodingType type)
 {
     HttpPair pair;
     pair.key = "Content-Encoding";
-    pair.value = "gzip";
+    switch (type){
+    case HTTP_Encoding_Deflate: pair.value = "deflate"; break;
+    case HTTP_Encoding_Gzip: pair.value = "gzip"; break;
+    case HTTP_Encoding_Brotli: pair.value = "br"; break;
+    case HTTP_Encoding_None: pair.value = "none"; break;
+    }
+
     header.lines.push_back(pair);
 }
 
@@ -80,7 +86,7 @@ HttpHeader getDefaultHeader(HTTP_Status status, HTTP_ContentTypes type)
     if ( status == HTTP1_1_OK ){
         addContentType(result, type);
         //addContentLength(result, len);
-        addContentEncoding(result);
+        //addContentEncoding(result);
     }
     return result;
 }

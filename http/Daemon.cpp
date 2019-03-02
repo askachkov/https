@@ -55,8 +55,8 @@ bool Daemon::reloadConfig()
 
 int Daemon::run() 
 {
-    std::thread t1(default_Task, processClient, PORT_NO);
-    std::thread t2(default_Task, processClientSSL, PORT_SSL_NO);
+    std::thread t1(default_Task, processClient, PORT_NO, mLoggerId);
+    std::thread t2(default_Task, processClientSSL, PORT_SSL_NO, mLoggerId);
     t1.join();
     t2.join();
 	return IDaemon::EXIT;

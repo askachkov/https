@@ -2,7 +2,7 @@
 #include "tasks.h"
 #include <thread>
 
-void default_Task(F fnc, uint16_t port)
+void default_Task(F fnc, uint16_t port, int logID)
 {
      SOCKET sockfd, newsockfd;
      socklen_t clilen;
@@ -15,14 +15,14 @@ void default_Task(F fnc, uint16_t port)
      serv_addr.sin_port = htons(port);
      if (bind(sockfd, (struct sockaddr *) &serv_addr,
               sizeof(serv_addr)) < 0)
-              error("ERROR on binding");
+              error("ERROR on binding", logID);
      listen(sockfd,5);
      clilen = sizeof(cli_addr);
      while ( true ){
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if ( newsockfd != 0 ){
             printf("Socket %llu connected\n", newsockfd);
-            std::thread (fnc,newsockfd).detach();
+            std::thread (fnc,newsockfd, logID).detach();
         }
      }
      close(sockfd);

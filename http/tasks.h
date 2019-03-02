@@ -3,8 +3,8 @@
 
 #include "utils.h"
 
-typedef void F(SOCKET);
+typedef void F(SOCKET, int);
 
-void default_Task(F fnc, uint16_t port);
+void default_Task(F fnc, uint16_t port, int logID);
 
 #endif // TASKS_H
